@@ -1,0 +1,34 @@
+# steps:
+# - name: 'gcr.io/cloud-builders/docker'
+#   args: [ 'build', '-t', 'gcr.io/projects-mvp/quizmine', '.' ]
+#  # Push the container image to Container Registry
+# - name: 'gcr.io/cloud-builders/docker'
+#   args: ['push', 'gcr.io/projects-mvp/quizmine:$COMMIT_SHA']
+#  # Deploy container image to Cloud Run
+# - name: 'gcr.io/google.com/cloudsdktool/cloud-sdk'
+#   entrypoint: gcloud
+#   args:
+#   - 'run'
+#   - 'deploy'
+#   - 'SERVICE-NAME'
+#   - '--image'
+#   - 'gcr.io/projects-mvp/quizmine:$COMMIT_SHA'
+#   - '--region'
+#   - 'REGION'
+# images:
+#  - 'gcr.io/projects-mvp/quizmine:$COMMIT_SHA'
+steps:
+# Build the container image
+- name: 'gcr.io/cloud-builders/docker'
+  args: ['build', '-t', 'gcr.io/projects-mvp/quizmine', '.']
+# Push the container image to Container Registry
+- name: 'gcr.io/cloud-builders/docker'
+  args: ['push', 'gcr.io/projects-mvp/quizmine']
+# Deploy container image to Cloud Run
+- name: 'gcr.io/google.com/cloudsdktool/cloud-sdk'
+  entrypoint: gcloud
+  args: ['run', 'deploy', 'quizmine', '--image', 'gcr.io/projects-mvp/quizmine', '--region', 'us-central1']
+images:
+- gcr.io/projects-mvp/quizmine
+options:
+ logging: CLOUD_LOGGING_ONLY 
